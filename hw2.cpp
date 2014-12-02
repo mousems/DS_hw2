@@ -1,8 +1,7 @@
 #include <iostream> 
 using namespace std; 
 
-//============implete a int Stack.==========
-// positive number suggest.
+//============implete a positive int Queue.==========
 class intQueue{
     private:
         int num[10];
@@ -35,44 +34,13 @@ int intQueue::deQueue(){
     return num[front];
 }
 
-//============implete a int Stack.==========
+//============implete a positive int Queue.==========
 
 //==========MyString========
 int main() { 
 
-    intQueue A;
-    A.Queue(1);
-    A.Queue(5);
-    A.Queue(4);
-    A.Queue(3);
-    cout << A.deQueue();
-    A.Queue(2);
-    cout << A.deQueue();
-    cout << A.deQueue();
-    A.Queue(1);
-    A.Queue(5);
-    A.Queue(4);
-    A.Queue(3);
-    cout << A.deQueue();
-    A.Queue(2);
-    cout << A.deQueue();
-    cout << A.deQueue();
-    A.Queue(1);
-    A.Queue(5);
-    A.Queue(4);
-    A.Queue(3);
-    cout << A.deQueue();
-    A.Queue(2);
-    cout << A.deQueue();
-    cout << A.deQueue();
-    A.Queue(1);
-    A.Queue(5);
-    A.Queue(4);
-    A.Queue(3);
-    cout << A.deQueue();
-    A.Queue(2);
-    cout << A.deQueue();
-    cout << A.deQueue();
+
+
     return 0; 
 }
 
