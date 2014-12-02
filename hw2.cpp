@@ -87,14 +87,25 @@ int ClientList::GetAll(int index){
 
 //==========MyString========
 int main() { 
+    int clients;
+    cout << "Welcome , how many clients? >>";
+    cin >> clients;
+    cout << "OK , let's starting input every client with space separated , Ex.:1 2 3\n";
 
-    ClientList A;
-    A.Input(1,2,2);
-    A.Input(4,5,5);
-    A.Input(2,3,3);
-    A.Input(3,2,4);
-    cout << A.GetSer(2);
-    cout << A.GetArr(4);
+    ClientList ClientList;
+    for (int i = 1; i <= clients; i++)
+    {
+        cout << "Please input No." << i << " Client's Arr,Ser,All: >>";
+        int Arr,Ser,All;
+        cin >> Arr >> Ser >> All;
+        ClientList.Input(Arr,Ser,All);
+    }
+
+    cout << ClientList.GetArr(2);
+    cout << ClientList.GetSer(2);
+    cout << ClientList.GetAll(2);
+
+
     return 0; 
 }
 
