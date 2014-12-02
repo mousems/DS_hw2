@@ -63,6 +63,7 @@ class ClientList{
         void SetStatus(int index , int StatusIn);
         int DeQueueClient();
         int GetStatus(int index);
+        int SearchByArr(int ArrIn);
         int GetArr(int index);
         int GetSer(int index);
         int GetAll(int index);
@@ -123,6 +124,15 @@ int ClientList::GetAll(int index){
         return -1;
     }
     return All[index];
+}
+
+int ClientList::SearchByArr(int ArrIn){
+    for (int i = 1; i <= count; ++i){
+        if (GetArr(i)==ArrIn){
+            return i;
+        }
+    }
+    return -1;
 }
 //============implete client list.==========
 
