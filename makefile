@@ -5,3 +5,4 @@ hw2.o: hw2.cpp
 	g++ hw2.cpp -c
 clean:
 	rm -rf hw2.o 
+	rm -rf hw2
