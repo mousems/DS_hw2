@@ -2,6 +2,7 @@
 using namespace std; 
 
 //============implete a int Stack.==========
+// positive number suggest.
 class intQueue{
     private:
         int num[10];
@@ -20,7 +21,7 @@ intQueue::intQueue(void){
 
 void intQueue::Queue(int i){
     if(front==rear+1 || rear-10==front){
-        cout << "intQueue is full.\n";
+        return -1;
     }else{
         rear = (rear + 1) % 10;
         num[rear]=i;
@@ -28,7 +29,6 @@ void intQueue::Queue(int i){
 }
 int intQueue::deQueue(){
     if(front==rear){
-        cout << "intQueue is empty.\n";
         return -1;
     }
     front = (front + 1) % 10;
