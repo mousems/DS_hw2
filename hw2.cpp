@@ -1,7 +1,7 @@
 #include <iostream> 
 using namespace std; 
 
-//============implete a positive int Queue.==========
+//============implete a positive int Queue. with cut line==========
 class intQueue{
     private:
         int num[10];
@@ -9,6 +9,7 @@ class intQueue{
         int rear;
     public:
         void Queue(int i);
+        void QueueCut(int i);
         int deQueue();
         intQueue();
 };
@@ -24,6 +25,17 @@ void intQueue::Queue(int i){
     }else{
         rear = (rear + 1) % 10;
         num[rear]=i;
+    }
+}
+void intQueue::QueueCut(int i){
+    if(front==rear+1 || rear-10==front){
+        // full.
+    }else{
+        num[front] = i;
+        front = front - 1;
+        if (front<0){
+            front+=10;
+        }
     }
 }
 int intQueue::deQueue(){
