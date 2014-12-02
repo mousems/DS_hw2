@@ -42,8 +42,11 @@ class ClientList{
         int Arr[10]; // store from 1
         int Ser[10]; // store from 1
         int All[10]; // store from 1
+        int Served[10]; // store from 1 , store 1 or 0
+        int DepTime[10]; // store from 1
     public:
         void Input(int Arr , int Ser , int All);
+        void StoreAnswer(int index , int ServedIn , int DepTimeIn);
         int GetArr(int index);
         int GetSer(int index);
         int GetAll(int index);
@@ -59,6 +62,10 @@ void ClientList::Input(int ArrIn , int SerIn , int AllIn){
     Arr[count] = ArrIn;
     Ser[count] = SerIn;
     All[count] = AllIn;
+}
+void ClientList::StoreAnswer(int index , int ServedIn , int DepTimeIn){
+    Served[count] = ServedIn;
+    DepTime[count] = DepTimeIn;
 }
 int ClientList::GetArr(int index){
     if (count<index)
@@ -105,7 +112,7 @@ int main() {
     cout << ClientList.GetSer(2);
     cout << ClientList.GetAll(2);
 
-
+    ClientList.StoreAnswer(1,0,2);
     return 0; 
 }
 
