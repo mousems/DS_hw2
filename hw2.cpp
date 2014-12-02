@@ -92,7 +92,6 @@ int ClientList::DeQueueClient(){
     for (int i = 1; i <= count; i++){
         if (Status[i]==0)
         {
-            SetStatus(i ,1);
             return i;
         }
     }
