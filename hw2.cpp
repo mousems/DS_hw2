@@ -56,9 +56,13 @@ class ClientList{
         int All[10]; // store from 1
         int Served[10]; // store from 1 , store 1 or 0
         int DepTime[10]; // store from 1
+        int Status[10]; // store from 1 , 0 for free , 1 for queued
     public:
         void Input(int Arr , int Ser , int All);
         void StoreAnswer(int index , int ServedIn , int DepTimeIn);
+        void SetStatus(int index , int StatusIn);
+        int DeQueueClient();
+        int GetStatus(int index);
         int GetArr(int index);
         int GetSer(int index);
         int GetAll(int index);
@@ -74,30 +78,48 @@ void ClientList::Input(int ArrIn , int SerIn , int AllIn){
     Arr[count] = ArrIn;
     Ser[count] = SerIn;
     All[count] = AllIn;
+    Status[count] = 0;
 }
 void ClientList::StoreAnswer(int index , int ServedIn , int DepTimeIn){
-    Served[count] = ServedIn;
-    DepTime[count] = DepTimeIn;
+    Served[index] = ServedIn;
+    DepTime[index] = DepTimeIn;
 }
+void ClientList::SetStatus(int index , int StatusIn){
+    Status[index] = StatusIn;
+}
+int ClientList::DeQueueClient(){
+    for (int i = 1; i <= count; i++){
+        if (Status[i]==0)
+        {
+            SetStatus(i ,1);
+            return i;
+        }
+    }
+    return -1;
+}
+int ClientList::GetStatus(int index){
+    if (count<index){
+        return -1;
+    }
+    return Status[index];
+}
+
 int ClientList::GetArr(int index){
-    if (count<index)
-    {
+    if (count<index){
         return -1;
     }
     return Arr[index];
 }
 
 int ClientList::GetSer(int index){
-    if (count<index)
-    {
+    if (count<index){
         return -1;
     }
     return Ser[index];
 }
 
 int ClientList::GetAll(int index){
-    if (count<index)
-    {
+    if (count<index){
         return -1;
     }
     return All[index];
@@ -110,10 +132,9 @@ int main() {
     cout << "Welcome , how many clients? >>";
     cin >> clients;
     cout << "OK , let's starting input every client with space separated , Ex.:1 2 3\n";
-
+    intQueue intQueue;
     ClientList ClientList;
-    for (int i = 1; i <= clients; i++)
-    {
+    for (int i = 1; i <= clients; i++){
         cout << "Please input No." << i << " Client's Arr,Ser,All: >>";
         int Arr,Ser,All;
         cin >> Arr >> Ser >> All;
