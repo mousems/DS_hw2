@@ -1,52 +1,6 @@
 #include <iostream> 
 using namespace std; 
 
-//============implete a positive int Queue. with cut line==========
-class intQueue{
-    private:
-        int num[10];
-        int front;
-        int rear;
-    public:
-        void Queue(int i);
-        void QueueCut(int i);
-        int deQueue();
-        intQueue();
-};
-
-intQueue::intQueue(void){
-    front=0;
-    rear=0;
-}
-
-void intQueue::Queue(int i){
-    if(front==rear+1 || rear-10==front){
-        // full.
-    }else{
-        rear = (rear + 1) % 10;
-        num[rear]=i;
-    }
-}
-void intQueue::QueueCut(int i){
-    if(front==rear+1 || rear-10==front){
-        // full.
-    }else{
-        num[front] = i;
-        front = front - 1;
-        if (front<0){
-            front+=10;
-        }
-    }
-}
-int intQueue::deQueue(){
-    if(front==rear){
-        return -1;
-    }
-    front = (front + 1) % 10;
-    return num[front];
-}
-
-//============implete a positive int Queue.==========
 //============implete client list.==========
 class ClientList{
     private:
@@ -58,6 +12,7 @@ class ClientList{
         int DepTime[10]; // store from 1
         int Status[10]; // store from 1 , 0 for free , 1 for queued
     public:
+        void Debug_ShowStat();
         void Input(int Arr , int Ser , int All);
         void StoreAnswer(int index , int ServedIn , int DepTimeIn);
         void SetStatus(int index , int StatusIn);
@@ -73,8 +28,24 @@ class ClientList{
 
 ClientList::ClientList(void){
     count=0;
+    for (int i = 1; i <=10; ++i)
+    {
+        Arr[i]=-1;
+        Ser[i]=-1;
+        All[i]=-1;
+        Served[i]=-1;
+        DepTime[i]=-1;
+        Status[i]=-1;
+    }
 }
-
+void ClientList::Debug_ShowStat(){
+    cout << "======debug======\n";
+    cout << "i , Served , DepTime , Status\n";
+    for (int i = 1; i <= count; ++i){
+        cout << i << "   " << Served[i] << "      " << DepTime[i] << "        " << Status[i] << "\n";
+    }
+    cout << "=================\n";
+}
 void ClientList::Input(int ArrIn , int SerIn , int AllIn){
     count++;
     Arr[count] = ArrIn;
@@ -139,6 +110,7 @@ void ClientList::DumpAnswer(int index){
 }
 //============implete client list.==========
 
+
 //==========MyString========
 int main() { 
     int clients;
@@ -160,10 +132,10 @@ int main() {
     ToQueue_Dep = ClientList.GetArr(ToQueue) + ClientList.GetSer(ToQueue);
     ClientList.SetStatus(ToQueue , 1);
     ClientList.StoreAnswer(ToQueue , 1 , ToQueue_Dep);
-
+    cout << "程式自動完成了第一個人，結束時間是" << ToQueue_Dep << " 將繼續下去：\n";
     while(1){
-        int tmp[10];
-        int tmp_count=0;
+        int tmp[10];// store start from 0
+        int tmp_count=0; 
         // ToQueue_Dep is 上次結束時間
         
         int newClient = ClientList.DeQueueClient(ToQueue_Dep);
@@ -171,6 +143,7 @@ int main() {
             break;
         }
         while(newClient != -1){
+            cout << "newClient come:" << newClient << "\n";
             int newClient_Arr = ClientList.GetArr(newClient); 
             int newClient_Ser = ClientList.GetSer(newClient);
             int newClient_All = ClientList.GetAll(newClient);
@@ -178,48 +151,80 @@ int main() {
             if (tmp_count==0){ // queue empty
 
                 if (newClient_Arr+newClient_All >= ToQueue_Dep){
+                    cout << newClient << "可以等，進入 queue\n";
                     // 可以等，進入 queue
                     ClientList.SetStatus(newClient ,1);
                     tmp[tmp_count] = newClient;
                     tmp_count++;
+
+                    cout <<  "queue變成:";
+                    for (int i = 0; i < tmp_count; ++i){
+                        cout << tmp[i] << " ";
+                    }
+                    cout << "\n";
                 }else{
+                    cout << newClient << "queue 空了也無法插隊，拋棄 GG\n";
+
                     // 不能等， queue 空了也無法插隊，拋棄
                     ClientList.SetStatus(newClient ,1);
                     ClientList.StoreAnswer(newClient , 0 , -1);
                 }
             }else{
                 int newClient_predict_start=ToQueue_Dep; // queue 裡面的人都完成 是幾時
-                for (int i = 1; i < tmp_count; ++i){
+                for (int i = 0; i < tmp_count; ++i){
                     newClient_predict_start+=ClientList.GetSer(tmp[i]);
                 }
 
                 if (newClient_predict_start - newClient_Arr < newClient_All){
+                    cout << newClient << "可以等，進入 queue\n";
+
                     // 可以等，進入 queue
                     // 要等 queue 裡面的人都完成
                     ClientList.SetStatus(newClient ,1);
                     tmp[tmp_count] = newClient;
                     tmp_count++;
+
+
+                    cout <<  newClient << "進入queue變成:";
+                    for (int i = 0; i < tmp_count; ++i){
+                        cout << tmp[i] << " ";
+                    }
+                    cout << "\n";
                 }else{
+                    cout << newClient << "不能等，看看能不能插隊，要先判斷 EndOne 的資訊\n";
+
                     // 不能等，看看能不能插隊，要先判斷 EndOne 的資訊
                     int EndOneWhenStart=ToQueue_Dep; // EndOne 預計幾時輪到他
                     // 上次結束時間加上前面所有人的服務時間
-                    for (int i = 1; i < tmp_count; i++){
+                    for (int i = 0; i < tmp_count-1; i++){
                         EndOneWhenStart += ClientList.GetSer(tmp[i]);
                     }
 
-                    int EndOneWillWait=EndOneWhenStart-ClientList.GetArr(tmp[tmp_count]); 
+                    int EndOneWillWait=EndOneWhenStart-ClientList.GetArr(tmp[tmp_count-1]); 
                     // EndOne 原本預計會等多久
 
                     if (EndOneWillWait-newClient_Ser >= 0){
+                        cout << tmp[tmp_count-1] << "可以忍受" << newClient <<"插隊後的等待\n";
+
                         // EndOne 可以忍受插隊後的等待
                         // => 原本預計需要等多久，大於newClient 的 ser time
                         // 插隊
                         // newClient 插在 EndOne 之前
                         ClientList.SetStatus(newClient ,1);
-                        tmp[tmp_count+1]=tmp[tmp_count];
-                        tmp[tmp_count]=newClient;
+                        tmp[tmp_count]=tmp[tmp_count-1];
+                        tmp[tmp_count-1]=newClient;
                         tmp_count++;
+
+
+                        cout <<  newClient << "插隊了！queue變成:";
+                        for (int i = 0; i < tmp_count; ++i){
+                            cout << tmp[i] << " ";
+                        }
+                        cout << "\n";
+
                     }else{
+                        cout << tmp[tmp_count-1] << "不能忍受" << newClient << "插隊 GG\n";
+
                         // 不能忍受，無法插隊，GG
                         ClientList.SetStatus(newClient ,1);
                         ClientList.StoreAnswer(newClient , 0 , -1);
@@ -228,14 +233,23 @@ int main() {
                 }
 
             }
+            ClientList.Debug_ShowStat();
             newClient = ClientList.DeQueueClient(ToQueue_Dep);
+
         }
+
+        cout << "Show Queue:";
+        for (int i = 0; i < tmp_count; ++i){
+            cout << tmp[i] << " ";
+        }
+        cout << "\n";
 
         // 清除 Queue，獲得新的ToQueue_Dep
 
         for (int i = 0; i < tmp_count; ++i){
             ToQueue_Dep += ClientList.GetSer(tmp[i]);
             ClientList.StoreAnswer(tmp[i] ,1 ,ToQueue_Dep);
+            cout << tmp[i] << "完成了！結束時間是" << ToQueue_Dep << "\n";
         }
         tmp_count=0;
 
@@ -243,7 +257,7 @@ int main() {
     }
 
 
-
+    cout << "最終結果：\n";
     for (int i = 1; i<= clients; i++){
         ClientList.DumpAnswer(i);
     }
